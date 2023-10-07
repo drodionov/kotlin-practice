@@ -1,6 +1,6 @@
 package com.drodionov.learning.kotlin.web.api
 
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -19,11 +19,13 @@ class HelloControllerTest {
 
     @Test
     fun hello() {
-        val helloString = webTestClient.get().uri("/v1/hello/test").exchange()
-            .expectStatus().is2xxSuccessful
-            .expectBody(String::class.java)
-            .returnResult().responseBody
-
-        Assertions.assertEquals("Hello test! Here is your property: Dummy test prop", helloString)
+        with(
+            webTestClient.get().uri("/v1/hello/test").exchange()
+                .expectStatus().is2xxSuccessful
+                .expectBody(String::class.java)
+                .returnResult().responseBody
+        ) {
+            assertEquals("Hello test! Here is your property: Dummy test prop", this)
+        }
     }
 }
